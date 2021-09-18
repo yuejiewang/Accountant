@@ -49,6 +49,14 @@ def add_participant():
         lbl_content.set(print_participants())
 
 
+def enter(event):
+    add_participant()
+
+
+def proceed(event):
+    next_page()
+
+
 Button(
     ws,
     text="Proceed to add items",
@@ -62,4 +70,6 @@ Button(
     command=add_participant
     ).pack(fill=X, side=BOTTOM)
 
+ws.bind('<Return>', enter)
+ws.bind('<Shift-Return>', proceed)
 ws.mainloop()

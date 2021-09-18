@@ -8,9 +8,11 @@ ws['bg'] = '#5d8a82'
 ws.attributes('-fullscreen', True)
 font_default = ("Times bold", 14)
 
-buyer_list = dict()
+buyer_list = list()
 variable = StringVar()
 variable.set("buyer")
+buy_content = StringVar()
+buy_content.set("By: \n")
 
 
 def next_page():
@@ -22,10 +24,16 @@ def add_buyer(choice):
     global buyer_list
     choice = variable.get()
     if choice == "all":
-        for k in bill.keys():
-            buyer_list[k] = 1
+        buyer_list = list(bill.keys())
     else:
-        buyer_list[choice] = 1
+        if choice in buyer_list:
+            buyer_list.remove(choice)
+        else:
+            buyer_list.append(choice)
+    c = "By: "
+    for b in buyer_list:
+        c += "%s " % b
+    buy_content.set(c + "\n")
     # print(buyer_list)
 
 
@@ -47,13 +55,20 @@ e = Entry(
 e.pack(pady=10, side=TOP)
 
 
+buy_lbl = Label(
+    textvariable=buy_content,
+    bg='#5d8a82'
+    )
+buy_lbl.pack(pady=10, side=TOP)
+
+
 lbl_content = StringVar()
 lbl_content.set("Purchase: \n")
 lbl = Label(
     textvariable=lbl_content,
     bg='#5d8a82'
     )
-lbl.pack(fill=BOTH, expand=TRUE)
+lbl.pack(pady=10, side=TOP)
 
 
 def loop_add():
@@ -62,18 +77,27 @@ def loop_add():
     amount = e.get()
     e.delete(0, END)
     if amount[0] == '-':
-        tot = add(num_div, list(buyer_list.keys()), -float(amount[1:]))
+        tot = add(num_div, buyer_list, -float(amount[1:]))
     else:
-        tot = add(num_div, list(buyer_list.keys()), float(amount))
+        tot = add(num_div, buyer_list, float(amount))
     buyer_list.clear()
     variable.set("buyer")
     tot_string = "Purchase: \n"
     for k in bill_string.keys():
         tot_string += k + " = " + bill_string[k] + " = %.2f\n" % bill_value[k]
+    tot_string += "\nPersonal sum: \n"
     for k in bill.keys():
         tot_string += k + " = %.2f\n" % bill[k]
-    tot_string += "total = %.2f\n" % tot
+    tot_string += "\nTOTAL:\n%.2f\n" % tot
     lbl_content.set(tot_string)
+
+
+def enter(event):
+    loop_add()
+
+
+def proceed(event):
+    next_page()
 
 
 Button(
@@ -89,4 +113,6 @@ Button(
     command=loop_add
     ).pack(fill=X, side=BOTTOM)
 
+ws.bind('<Return>', enter)
+ws.bind('<Shift-Return>', proceed)
 ws.mainloop()
