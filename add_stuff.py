@@ -34,7 +34,6 @@ def add_buyer(choice):
     for b in buyer_list:
         c += "%s " % b
     buy_content.set(c + "\n")
-    # print(buyer_list)
 
 
 opts = list(bill.keys())
@@ -85,8 +84,6 @@ def loop_add():
         tot = add(num_div, buyer_list, -float(amount[1:]))
     else:
         tot = add(num_div, buyer_list, float(amount))
-    # buyer_list.clear()
-    print(buyer_list)
     variable.set("buyer")
     tot_string = "Purchase: \n"
     for k in bill_string.keys():

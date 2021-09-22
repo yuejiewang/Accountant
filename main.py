@@ -25,11 +25,6 @@ def add(num_div, list_names, amount):
 
 def check_out():
     global total, bill_string, bill_value
-    '''
-    for k in bill_string.keys():
-        bill_string[k] = k + " = " + bill_string[k] + " = %.2f" % bill_value[k]
-        print(bill_string[k])
-    '''
     for k in bill.keys():
         bill[k] = k + " = %.2f" % bill[k]
         print(bill[k])

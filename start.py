@@ -49,12 +49,29 @@ def add_participant():
         lbl_content.set(print_participants())
 
 
+def delete():
+    key = e.get()
+    if key == "" or key not in bill.keys():
+        return
+    e.delete(0, END)
+    bill.pop(key)
+    lbl_content.set(print_participants())
+
+
 def enter(event):
     add_participant()
 
 
 def proceed(event):
     next_page()
+
+
+Button(
+    ws,
+    text="DELETE",
+    font=font_default,
+    command=delete
+    ).pack(pady=10, side=TOP)
 
 
 Button(
