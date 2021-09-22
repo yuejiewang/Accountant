@@ -74,13 +74,19 @@ lbl.pack(pady=10, side=TOP)
 def loop_add():
     global buyer_list
     num_div = len(buyer_list)
+    if num_div == 0:
+        buy_content.set("No buyer, please enter at least one buyer.\n")
+        return
     amount = e.get()
     e.delete(0, END)
+    if amount == "":
+        return
     if amount[0] == '-':
         tot = add(num_div, buyer_list, -float(amount[1:]))
     else:
         tot = add(num_div, buyer_list, float(amount))
-    buyer_list.clear()
+    # buyer_list.clear()
+    print(buyer_list)
     variable.set("buyer")
     tot_string = "Purchase: \n"
     for k in bill_string.keys():
