@@ -40,7 +40,7 @@ lbl.pack(fill=BOTH, expand=TRUE)
 
 def add_participant():
     global lbl_content
-    name = e.get()
+    name = e.get().strip()
     if name == "":
         return
     e.delete(0, END)
@@ -50,7 +50,7 @@ def add_participant():
 
 
 def delete():
-    key = e.get()
+    key = e.get().strip()
     if key == "" or key not in bill.keys():
         return
     e.delete(0, END)

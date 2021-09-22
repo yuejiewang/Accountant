@@ -76,14 +76,27 @@ def loop_add():
     if num_div == 0:
         buy_content.set("No buyer, please enter at least one buyer.\n")
         return
-    amount = e.get()
+    message = e.get().strip()
     e.delete(0, END)
-    if amount == "":
+    if message == "":
         return
-    if amount[0] == '-':
-        tot = add(num_div, buyer_list, -float(amount[1:]))
+    message = message.replace('x', '*')
+    message = message.replace('X', '*')
+    msg_l = message.split("*")
+    amt_l = list()
+    for m in msg_l:
+        amt_l.append(m.strip())
+    if amt_l[0][0] == '-':
+        if len(amt_l) == 1:
+            amount = -float(amt_l[0][1:])
+        else:
+            amount = -float(amt_l[0][1:]) * float(amt_l[1])
     else:
-        tot = add(num_div, buyer_list, float(amount))
+        if len(amt_l) == 1:
+            amount = float(amt_l[0])
+        else:
+            amount = float(amt_l[0]) * float(amt_l[1])
+    tot = add(num_div, buyer_list, amount)
     variable.set("buyer")
     tot_string = "Purchase: \n"
     for k in bill_string.keys():
