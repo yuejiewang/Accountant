@@ -80,22 +80,8 @@ def loop_add():
     e.delete(0, END)
     if message == "":
         return
-    message = message.replace('x', '*')
-    message = message.replace('X', '*')
-    msg_l = message.split("*")
-    amt_l = list()
-    for m in msg_l:
-        amt_l.append(m.strip())
-    if amt_l[0][0] == '-':
-        if len(amt_l) == 1:
-            amount = -float(amt_l[0][1:])
-        else:
-            amount = -float(amt_l[0][1:]) * float(amt_l[1])
-    else:
-        if len(amt_l) == 1:
-            amount = float(amt_l[0])
-        else:
-            amount = float(amt_l[0]) * float(amt_l[1])
+    amount = eval(message)
+
     tot = add(num_div, buyer_list, amount)
     variable.set("buyer")
     tot_string = "Purchase: \n"
