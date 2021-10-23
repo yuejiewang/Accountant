@@ -1,5 +1,6 @@
 from tkinter import *
 from main import *
+from functools import partial
 
 ws = Tk()
 ws.geometry('400x300')
@@ -20,32 +21,78 @@ def next_page():
     check_out()
 
 
-def add_buyer(choice):
+def set_buyer(choice, _iv):
+    val = _iv.get()
     global buyer_list
-    choice = variable.get()
-    if choice == "all":
-        buyer_list = list(bill.keys())
+    if val:
+        if choice not in buyer_list:
+            buyer_list.append(choice)
     else:
         if choice in buyer_list:
             buyer_list.remove(choice)
-        else:
-            buyer_list.append(choice)
     c = "By: "
-    for b in buyer_list:
-        c += "%s " % b
+    for _b in buyer_list:
+        c += "%s " % _b
     buy_content.set(c + "\n")
 
 
 opts = list(bill.keys())
-opts.append("all")
-menu = OptionMenu(
-    ws,
-    variable,
-    *opts,
-    command=add_buyer
-    )
-menu.pack(pady=10, side=TOP)
+chk_list = list()
+for cnt in range(len(opts)):
+    b = opts[cnt]
+    iv = IntVar()
+    chk = Checkbutton(
+        ws,
+        text=b,
+        width=20,
+        variable=iv,
+        onvalue=1,
+        offvalue=0,
+        anchor="w",
+        command=partial(set_buyer, b, iv)
+        )
 
+    chk.pack()
+    chk_list.append(chk)
+
+
+def add_all():
+    global buyer_list
+    buyer_list = list(bill.keys())
+    for i in range(len(chk_list)):
+        chk_list[i].select()
+    c = "By: "
+    for _b in buyer_list:
+        c += "%s " % _b
+    buy_content.set(c + "\n")
+
+
+def clear_all():
+    global buyer_list
+    buyer_list = list()
+    for i in range(len(chk_list)):
+        chk_list[i].deselect()
+    c = "By: "
+    for _b in buyer_list:
+        c += "%s " % _b
+    buy_content.set(c + "\n")
+
+
+Button(
+    ws,
+    text="all",
+    font=font_default,
+    width=6,
+    command=add_all
+    ).pack(pady=5)
+
+Button(
+    ws,
+    text="clear",
+    font=font_default,
+    width=6,
+    command=clear_all
+    ).pack()
 
 e = Entry(
     ws,
@@ -53,13 +100,11 @@ e = Entry(
     )
 e.pack(pady=10, side=TOP)
 
-
 buy_lbl = Label(
     textvariable=buy_content,
     bg='#5d8a82'
     )
 buy_lbl.pack(pady=10, side=TOP)
-
 
 lbl_content = StringVar()
 lbl_content.set("Purchase: \n")
